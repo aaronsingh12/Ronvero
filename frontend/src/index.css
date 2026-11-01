@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-graphite/10;
+  }
+  html {
+    scroll-behavior: auto; /* Lenis takes over smooth scrolling */
+    /* `clip` (not `hidden`) prevents ANY horizontal drift on mobile without
+       creating a scroll container — so `position: sticky` keeps working. */
+    overflow-x: clip;
+  }
+  body {
+    overflow-x: clip;
+    width: 100%;
+    max-width: 100%;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display;
+  }
+  ::selection {
+    @apply bg-ember text-chalk;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-mist;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-graphite/25 rounded-full;
+  }
+}
+
+@layer components {
+  /* Frosted glass surface for the sticky nav / overlays */
+  .glass {
+    @apply bg-mist/70 backdrop-blur-md border border-white/40;
+  }
+  .glass-dark {
+    @apply bg-graphite/60 backdrop-blur-md border border-chalk/10;
+  }
+
+  /* Signature "trace line" accent used as an underline / divider motif */
+  .trace-underline {
+    position: relative;
+  }
+  .trace-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -0.35em;
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(90deg, theme('colors.ember'), theme('colors.trace'));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s theme('transitionTimingFunction.out-expo');
+  }
+  .trace-underline:hover::after,
+  .trace-underline.is-active::after {
+    transform: scaleX(1);
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-graphite px-7 py-3.5 font-body text-sm font-semibold text-chalk transition-transform duration-300 ease-out-expo hover:scale-[1.02] active:scale-[0.98];
+  }
+  .btn-accent {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-ember px-7 py-3.5 font-body text-sm font-semibold text-chalk shadow-glow transition-transform duration-300 ease-out-expo hover:scale-[1.02] active:scale-[0.98];
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-graphite/15 bg-transparent px-7 py-3.5 font-body text-sm font-semibold text-char transition-colors duration-300 hover:bg-graphite hover:text-chalk;
+  }
+
+  .skeleton {
+    @apply relative overflow-hidden bg-graphite/10 bg-[length:200%_100%] bg-gradient-to-r from-graphite/5 via-graphite/15 to-graphite/5 animate-shimmer;
+  }
+
+  .eyebrow {
+    @apply font-mono text-xs uppercase tracking-wideish text-ember;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  /* Hide scrollbars on horizontal swipe strips (product galleries, filter rows) */
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
