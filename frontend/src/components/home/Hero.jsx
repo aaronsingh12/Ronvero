@@ -82,4 +82,4 @@ export default function Hero({ banner }) {
       </motion.div>
     </section>
   );
-}\n
+}
