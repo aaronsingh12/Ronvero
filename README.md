@@ -67,13 +67,24 @@ Netlify site's environment variables to the **origin** of the deployed API
 (for example, `https://ronvero-api.example.com`, without `/api`).
 
 The Express API and MongoDB are not hosted by Netlify's static site deploy.
-Deploy `backend/` to a Node.js host and MongoDB to a managed database such as
-MongoDB Atlas. Set the backend environment variables from `backend/.env.example`
-on that host, including `MONGO_URI`, strong separate JWT secrets, and
-`CLIENT_URL` containing the Netlify site origin. Never commit `.env` files or
-put backend secrets in Netlify's `VITE_*` variables. After the API is live,
-seed its database with `npm run seed` from `backend/` only if it is empty; this
-seed command clears existing catalog/demo records before importing them.
+The root `render.yaml` defines a Render web service for `backend/` (free plan,
+Singapore region, for initial demos). In Render, create a Blueprint from this
+GitHub repository and provide `MONGO_URI` and `CLIENT_URL` when prompted. Use a
+managed MongoDB Atlas cluster for `MONGO_URI`; set `CLIENT_URL` to the exact
+production Netlify site origin, with no trailing slash. Render generates
+separate strong values for both JWT secrets.
+
+After Render deploys, set Netlify's `VITE_API_URL` to the Render service origin
+(for example, `https://ronvero-api.onrender.com`, without `/api`) and trigger a
+new Netlify deploy. If you use a Netlify deploy-preview URL for testing, add
+that exact origin to the comma-separated `CLIENT_URL` value in Render as well.
+Never commit `.env` files or put backend secrets in Netlify's `VITE_*`
+variables. The free Render web service sleeps after 15 minutes without traffic
+and is suitable for demos, not a production shop.
+
+Seed the Atlas database with `npm run seed` from `backend/` only when it is
+empty; this seed command clears existing catalog/demo records before
+importing them.
 
 For a local Git push, create an empty GitHub repository, add it as `origin`,
 then push the current branch. The root `.gitignore` excludes local environment
